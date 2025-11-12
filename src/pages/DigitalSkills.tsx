@@ -164,10 +164,27 @@ const DigitalSkills = () => {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Digital Skills Training
             </h1>
-            <p className="text-xl md:text-2xl max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8">
               Comprehensive courses designed to equip you with in-demand digital
               skills for the modern workplace
             </p>
+            
+            {/* Sign Up and Login Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+              <Link
+                to="/RegisterPage"
+                className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 inline-flex items-center justify-center"
+              >
+                Sign Up
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <Link
+                to="/verify"
+                className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-green-600 transition-all transform hover:scale-105 inline-flex items-center justify-center"
+              >
+                Login
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
