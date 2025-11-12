@@ -16,7 +16,7 @@ const step1Schema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  contactNumber: z.string()
+  cellphone: z.string()
     .regex(/^0[0-9]{9}$/, "Please enter a valid 10-digit South African number starting with 0")
     .min(10, "Contact number must be exactly 10 digits")
     .max(10, "Contact number must be exactly 10 digits"),
@@ -58,7 +58,7 @@ export default function ManualRegistrationPage() {
       firstName: "",
       lastName: "",
       email: "",
-      contactNumber: "",
+      cellphone: "",
       password: "",
       confirmPassword: "",
     },
@@ -476,7 +476,7 @@ export default function ManualRegistrationPage() {
                         Mobile Number <span className="text-red-500">*</span>
                       </Label>
                       <Controller
-                        name="contactNumber"
+                        name="cellphone"
                         control={step1Form.control}
                         render={({ field }) => (
                           <Input
@@ -485,14 +485,14 @@ export default function ManualRegistrationPage() {
                             placeholder="0123456789"
                             value={field.value}
                             onChange={field.onChange}
-                            className={step1Form.formState.errors.contactNumber ? "border-red-500" : "border-gray-300"}
+                            className={step1Form.formState.errors.cellphone ? "border-red-500" : "border-gray-300"}
                             maxLength={10}
                           />
                         )}
                       />
-                      {step1Form.formState.errors.contactNumber && (
+                      {step1Form.formState.errors.cellphone && (
                         <p className="text-sm text-red-600 font-medium" role="alert">
-                          {step1Form.formState.errors.contactNumber.message}
+                          {step1Form.formState.errors.cellphone.message}
                         </p>
                       )}
                       <p className="text-xs text-gray-500">
