@@ -1,15 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
 import { Alert, AlertDescription } from "../components/ui/alert";
 import { ArrowLeft, Mail, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 // API base URL - same as registration
-const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://digital-skills-platform.onrender.com/api";
 
 export default function VerifyPage() {
   const navigate = useNavigate();
@@ -54,9 +68,9 @@ export default function VerifyPage() {
       console.log("Sending verification code to:", contact);
 
       const response = await fetch(`${API_BASE_URL}/auth/resend-verification`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: contact,
@@ -67,27 +81,30 @@ export default function VerifyPage() {
 
       if (!response.ok) {
         // Check if user doesn't exist
-        if (response.status === 404 || result.code === 'USER_NOT_FOUND') {
-          throw new Error('No account found with this email. Please register first.');
-        } 
+        if (response.status === 404 || result.code === "USER_NOT_FOUND") {
+          throw new Error(
+            "No account found with this email. Please register first."
+          );
+        }
         // Check if email is already verified
-        else if (result.code === 'ALREADY_VERIFIED') {
+        else if (result.code === "ALREADY_VERIFIED") {
           setIsAlreadyVerified(true);
           setIsSuccess(true); // Take them directly to success
           return;
         } else {
-          throw new Error(result.error || 'Failed to send verification code');
+          throw new Error(result.error || "Failed to send verification code");
         }
       }
 
       console.log("Verification code sent:", result);
-      
+
       setIsCodeSent(true);
       setShowCodeModal(true);
-      
     } catch (error: any) {
-      console.error('Send code error:', error);
-      setContactError(error.message || "Failed to send verification code. Please try again.");
+      console.error("Send code error:", error);
+      setContactError(
+        error.message || "Failed to send verification code. Please try again."
+      );
     } finally {
       setIsSending(false);
     }
@@ -106,9 +123,9 @@ export default function VerifyPage() {
       console.log("Verifying code:", verificationCode, "for email:", contact);
 
       const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: contact,
@@ -119,22 +136,23 @@ export default function VerifyPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Verification failed');
+        throw new Error(result.error || "Verification failed");
       }
 
       console.log("Verification successful:", result);
-      
+
       // Show success and then navigate or show success screen
       setIsSuccess(true);
-      
+
       // You can also store the token if needed for future requests
       if (result.token) {
-        localStorage.setItem('authToken', result.token);
+        localStorage.setItem("authToken", result.token);
       }
-
     } catch (error: any) {
-      console.error('Verification error:', error);
-      setVerificationError(error.message || "Invalid verification code. Please try again.");
+      console.error("Verification error:", error);
+      setVerificationError(
+        error.message || "Invalid verification code. Please try again."
+      );
     } finally {
       setIsVerifying(false);
     }
@@ -182,25 +200,29 @@ export default function VerifyPage() {
                     <CheckCircle2 className="h-12 w-12 text-green-600" />
                   </div>
                   <h2 className="mb-3 text-2xl font-bold text-gray-800 tracking-tight">
-                    {isAlreadyVerified ? "Welcome Back!" : "Verification Successful!"}
+                    {isAlreadyVerified
+                      ? "Welcome Back!"
+                      : "Verification Successful!"}
                   </h2>
                   <p className="mb-2 text-gray-600 leading-relaxed max-w-md text-base">
-                    {isAlreadyVerified 
-                      ? "Your email is already verified. Welcome back to the SCDP community!" 
+                    {isAlreadyVerified
+                      ? "Your email is already verified. Welcome back to the SCDP community!"
                       : "Your email has been successfully verified. Welcome to the SCDP community!"}
                   </p>
                   <div className="mt-8 w-full max-w-sm space-y-3">
                     <div className="rounded-lg bg-gray-50 p-4 text-left border border-gray-200">
-                      <p className="mb-2 text-sm font-semibold text-gray-800">What's Next:</p>
+                      <p className="mb-2 text-sm font-semibold text-gray-800">
+                        What's Next:
+                      </p>
                       <ol className="space-y-1 text-sm text-gray-600">
                         <li>• Explore available courses and training</li>
                         <li>• Connect with community projects</li>
                         <li>• Access digital skills resources</li>
                       </ol>
                     </div>
-                    <Button 
-                      onClick={handleFinish} 
-                      className="w-full bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105 rounded-lg" 
+                    <Button
+                      onClick={handleFinish}
+                      className="w-full bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105 rounded-lg"
                       size="lg"
                     >
                       Explore Platform
@@ -235,7 +257,9 @@ export default function VerifyPage() {
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex justify-center">
               <div className="text-4xl font-bold text-gray-800">
-                <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800 }}>
+                <span
+                  style={{ fontFamily: "Nunito, sans-serif", fontWeight: 800 }}
+                >
                   <span className="text-green-600">S</span>
                   <span className="text-yellow-500">C</span>
                   <span className="text-red-500">D</span>
@@ -243,9 +267,12 @@ export default function VerifyPage() {
                 </span>
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">Account Verification</h1>
+            <h1 className="text-2xl font-bold text-gray-800">
+              Account Verification
+            </h1>
             <p className="text-gray-600 mt-2">
-              Verify your email to access the Smart Community Development Platform.
+              Verify your email to access the Smart Community Development
+              Platform.
             </p>
           </div>
 
@@ -253,13 +280,16 @@ export default function VerifyPage() {
             <CardHeader>
               <CardTitle className="text-gray-800">Verify Your Email</CardTitle>
               <CardDescription className="text-gray-600">
-                Enter your registered email address to receive a verification code
+                Enter your registered email address to receive a verification
+                code
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                 <div className="space-y-2">
-                  <Label htmlFor="contact" className="text-gray-700">Email Address *</Label>
+                  <Label htmlFor="contact" className="text-gray-700">
+                    Email Address *
+                  </Label>
                   <Input
                     id="contact"
                     type="email"
@@ -267,9 +297,13 @@ export default function VerifyPage() {
                     value={contact}
                     onChange={(e) => handleContactChange(e.target.value)}
                     disabled={isCodeSent || isSuccess}
-                    className={contactError ? "border-red-500" : "border-gray-300"}
+                    className={
+                      contactError ? "border-red-500" : "border-gray-300"
+                    }
                   />
-                  {contactError && <p className="text-sm text-red-600">{contactError}</p>}
+                  {contactError && (
+                    <p className="text-sm text-red-600">{contactError}</p>
+                  )}
                 </div>
 
                 <Button
@@ -293,7 +327,9 @@ export default function VerifyPage() {
                 {isCodeSent && !isSuccess && (
                   <div className="space-y-4 pt-4 border-t border-gray-200">
                     <div className="space-y-2">
-                      <Label htmlFor="code" className="text-gray-700">Verification Code *</Label>
+                      <Label htmlFor="code" className="text-gray-700">
+                        Verification Code *
+                      </Label>
                       <Input
                         id="code"
                         type="text"
@@ -301,10 +337,16 @@ export default function VerifyPage() {
                         value={verificationCode}
                         onChange={(e) => setVerificationCode(e.target.value)}
                         maxLength={6}
-                        className={verificationError ? "border-red-500" : "border-gray-300 text-center text-lg"}
+                        className={
+                          verificationError
+                            ? "border-red-500"
+                            : "border-gray-300 text-center text-lg"
+                        }
                       />
                       {verificationError && (
-                        <p className="text-sm text-red-600">{verificationError}</p>
+                        <p className="text-sm text-red-600">
+                          {verificationError}
+                        </p>
                       )}
                     </div>
 
@@ -312,7 +354,11 @@ export default function VerifyPage() {
                       type="button"
                       className="w-full bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105 rounded-lg"
                       onClick={handleVerify}
-                      disabled={!verificationCode || isVerifying || verificationCode.length !== 6}
+                      disabled={
+                        !verificationCode ||
+                        isVerifying ||
+                        verificationCode.length !== 6
+                      }
                     >
                       {isVerifying ? (
                         <>
@@ -327,7 +373,10 @@ export default function VerifyPage() {
                 )}
 
                 {verificationError && !isCodeSent && (
-                  <Alert variant="destructive" className="bg-red-50 border-red-200">
+                  <Alert
+                    variant="destructive"
+                    className="bg-red-50 border-red-200"
+                  >
                     <XCircle className="h-4 w-4 text-red-600" />
                     <AlertDescription className="ml-2 text-red-600">
                       {verificationError}
@@ -338,7 +387,10 @@ export default function VerifyPage() {
 
               <div className="mt-6 text-center text-sm">
                 <span className="text-gray-600">New to SCDP? </span>
-                <Link to="/register" className="text-green-600 hover:text-green-700 hover:underline font-medium">
+                <Link
+                  to="/register"
+                  className="text-green-600 hover:text-green-700 hover:underline font-medium"
+                >
                   Join our community
                 </Link>
               </div>
@@ -356,22 +408,25 @@ export default function VerifyPage() {
               Verification Code Sent
             </DialogTitle>
             <DialogDescription className="text-gray-600">
-              We've sent a verification code to your email address. Please check your inbox and enter the code to verify your account.
+              We've sent a verification code to your email address. Please check
+              your inbox and enter the code to verify your account.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center py-6">
             <div className="rounded-lg bg-green-50 px-8 py-4 mb-4 border border-green-200">
               <p className="text-lg font-semibold text-green-700 text-center">
-                Check your email at:<br />
+                Check your email at:
+                <br />
                 <span className="font-bold">{contact}</span>
               </p>
             </div>
             <p className="text-sm text-gray-500 text-center">
-              The code will expire in 24 hours. If you don't see the email, check your spam folder.
+              The code will expire in 24 hours. If you don't see the email,
+              check your spam folder.
             </p>
           </div>
-          <Button 
-            onClick={() => setShowCodeModal(false)} 
+          <Button
+            onClick={() => setShowCodeModal(false)}
             className="w-full bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105 rounded-lg"
           >
             Got it

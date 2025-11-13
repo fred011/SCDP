@@ -2,21 +2,29 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { useToast } from "../components/hooks/use-toast";
- 
+
 export default function RegisterPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
- 
+
   const handleOAuthLogin = (provider: string) => {
-    const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
-    
-    if (provider === 'Google') {
+    const API_BASE_URL =
+      import.meta.env.VITE_API_URL ||
+      "https://digital-skills-platform.onrender.com/api";
+
+    if (provider === "Google") {
       window.location.href = `${API_BASE_URL}/auth/google`;
-    } else if (provider === 'Microsoft') {
+    } else if (provider === "Microsoft") {
       window.location.href = `${API_BASE_URL}/auth/microsoft`;
-    } else if (provider === 'Facebook') {
+    } else if (provider === "Facebook") {
       toast({
         title: "Coming Soon",
         description: "Facebook login will be available soon.",
@@ -24,7 +32,7 @@ export default function RegisterPage() {
       });
     }
   };
- 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex flex-col">
       {/* Header */}
@@ -39,14 +47,16 @@ export default function RegisterPage() {
           </Link>
         </div>
       </header>
- 
+
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           {/* Logo and Title */}
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex justify-center">
               <div className="text-4xl font-bold text-gray-800">
-                <span style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800 }}>
+                <span
+                  style={{ fontFamily: "Nunito, sans-serif", fontWeight: 800 }}
+                >
                   <span className="text-green-600">S</span>
                   <span className="text-yellow-500">C</span>
                   <span className="text-red-500">D</span>
@@ -58,10 +68,11 @@ export default function RegisterPage() {
               Join Our Community
             </h1>
             <p className="mt-2 text-gray-600 text-base leading-relaxed">
-              Become part of the movement empowering rural communities through technology and education.
+              Become part of the movement empowering rural communities through
+              technology and education.
             </p>
           </div>
- 
+
           <Card className="shadow-lg border-0">
             <CardHeader className="text-center pb-4">
               <CardTitle className="text-xl font-bold text-gray-800 tracking-tight">
@@ -79,17 +90,19 @@ export default function RegisterPage() {
               >
                 Register Manually
               </Button>
- 
+
               {/* Divider */}
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-gray-500 font-medium">or continue with</span>
+                  <span className="bg-white px-2 text-gray-500 font-medium">
+                    or continue with
+                  </span>
                 </div>
               </div>
- 
+
               {/* OAuth Buttons */}
               <Button
                 variant="outline"
@@ -116,13 +129,18 @@ export default function RegisterPage() {
                 </svg>
                 Continue with Google
               </Button>
- 
+
               <Button
                 variant="outline"
                 className="w-full h-12 text-base font-medium border-2 border-gray-300 text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all transform hover:scale-105 rounded-lg"
                 onClick={() => handleOAuthLogin("Microsoft")}
               >
-                <svg className="mr-2 h-5 w-5" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  className="mr-2 h-5 w-5"
+                  viewBox="0 0 23 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path d="M0 0h11v11H0z" fill="#F25022" />
                   <path d="M12 0h11v11H12z" fill="#7FBA00" />
                   <path d="M0 12h11v11H0z" fill="#00A4EF" />
@@ -130,21 +148,26 @@ export default function RegisterPage() {
                 </svg>
                 Continue with Microsoft
               </Button>
- 
+
               <Button
                 variant="outline"
                 className="w-full h-12 text-base font-medium border-2 border-gray-300 text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all transform hover:scale-105 rounded-lg"
                 onClick={() => handleOAuthLogin("Facebook")}
               >
-                <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="mr-2 h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
                 Continue with Facebook
               </Button>
- 
+
               {/* Footer Note */}
               <p className="text-xs text-center text-gray-500 leading-relaxed pt-2">
-                By continuing, you agree to SCDP's Terms & Conditions and Privacy Policy.
+                By continuing, you agree to SCDP's Terms & Conditions and
+                Privacy Policy.
               </p>
             </CardContent>
           </Card>
@@ -153,8 +176,8 @@ export default function RegisterPage() {
           <div className="text-center mt-6">
             <p className="text-gray-600">
               Already have an account?{" "}
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="text-green-600 font-semibold hover:text-green-700 transition-colors"
               >
                 Sign in here
