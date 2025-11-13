@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Loader2, MapPin } from "lucide-react";
+import { ArrowLeft, Loader2, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
@@ -53,7 +53,7 @@ const salaryRanges = [
 const genders = ["Male", "Female", "Prefer Not to Say", "Other"];
 const races = ["African", "Coloured", "Indian/Asian", "White", "Other", "Prefer Not to Say"];
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
 
 // Google Places Autocomplete Types
 interface PlacePrediction {
@@ -270,6 +270,7 @@ export default function ProfileCompletionPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRedirectingToLMS, setIsRedirectingToLMS] = useState(false);
   const [availableDistricts, setAvailableDistricts] = useState<string[]>([]);
   const [availableMunicipalities, setAvailableMunicipalities] = useState<string[]>([]);
 
@@ -314,96 +315,91 @@ export default function ProfileCompletionPage() {
     }
   }, [profileForm.watch("district")]);
 
-const onSubmit = async (data: ProfileData) => {
-  const authToken = localStorage.getItem('authToken');
-  
-  if (!authToken) {
-    toast({
-      title: "Error",
-      description: "Please complete registration first",
-      variant: "destructive",
-    });
-    return;
-  }
-
-  try {
-    setIsSubmitting(true);
-
-    // Get user data from localStorage or context
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  const onSubmit = async (data: ProfileData) => {
+    const authToken = localStorage.getItem('authToken');
     
-    // Prepare the data for submission to API
-    const profileData = {
-      physicalAddress: data.physicalAddress,
-      dateOfBirth: data.dateOfBirth,
-      educationLevel: data.educationLevel,
-      province: data.province,
-      district: data.district, // This maps to 'region' in database
-      municipality: data.municipality,
-      race: data.race || null,
-      idPassport: data.idPassport || null,
-      gender: data.gender,
-      employmentStatus: data.employmentStatus,
-      salaryRange: data.salaryRange || null
-    };
-
-    console.log("Sending profile data:", profileData);
-
-    const response = await fetch(`${API_BASE_URL}/auth/complete-profile`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-      },
-      body: JSON.stringify(profileData),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || 'Profile completion failed');
+    if (!authToken) {
+      toast({
+        title: "Error",
+        description: "Please complete registration first",
+        variant: "destructive",
+      });
+      return;
     }
 
-    console.log("Profile completion response:", result);
+    try {
+      setIsSubmitting(true);
 
-    // Prepare data for confirmation page
-    const confirmationData = {
-      first_name: userData.firstName || result.user?.first_name,
-      last_name: userData.lastName || result.user?.last_name,
-      physical_address: data.physicalAddress,
-      email: userData.email || result.user?.email,
-      dob: data.dateOfBirth,
-      qualification: data.educationLevel,
-      province: data.province,
-      region: data.district,
-      race: data.race,
-      cellphone: userData.cellphone || result.user?.cellphone,
-      gender: data.gender,
-      id_passport: data.idPassport,
-      employment_status: data.employmentStatus,
-      salary_range: data.salaryRange,
-      municipality: data.municipality
-    };
+      // Prepare the data for submission to API
+      const profileData = {
+        physicalAddress: data.physicalAddress,
+        dateOfBirth: data.dateOfBirth,
+        educationLevel: data.educationLevel,
+        province: data.province,
+        district: data.district, // This maps to 'region' in database
+        municipality: data.municipality,
+        race: data.race || null,
+        idPassport: data.idPassport || null,
+        gender: data.gender,
+        employmentStatus: data.employmentStatus,
+        salaryRange: data.salaryRange || null
+      };
 
-    // Store in localStorage as fallback
-    localStorage.setItem('userRegistrationData', JSON.stringify(confirmationData));
+      console.log("Sending profile data:", profileData);
 
-    // Navigate to confirmation page with the data
-    navigate('/profile-confirmation', { 
-      state: { userData: confirmationData } 
-    });
+      const response = await fetch(`${API_BASE_URL}/auth/complete-profile`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(profileData),
+      });
 
-  } catch (error: any) {
-    console.error('Profile completion error:', error);
-    toast({
-      title: "Profile Completion Failed",
-      description: error.message || "Please try again",
-      variant: "destructive",
-    });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Profile completion failed');
+      }
+
+      console.log("Profile completion response:", result);
+
+      // Now sync with LMS and redirect
+      setIsRedirectingToLMS(true);
+      
+      const lmsResponse = await fetch(`${API_BASE_URL}/auth/sync-to-lms`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const lmsResult = await lmsResponse.json();
+
+      if (!lmsResponse.ok) {
+        throw new Error(lmsResult.error || 'Failed to connect to LMS');
+      }
+
+      // Redirect to LMS
+      if (lmsResult.lmsLoginUrl) {
+        window.location.href = lmsResult.lmsLoginUrl;
+      } else {
+        throw new Error('No LMS URL received');
+      }
+
+    } catch (error: any) {
+      console.error('Profile completion error:', error);
+      toast({
+        title: "Profile Completion Failed",
+        description: error.message || "Please try again",
+        variant: "destructive",
+      });
+      setIsRedirectingToLMS(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleSkipProfile = () => {
     // Clear the token from localStorage
@@ -788,16 +784,19 @@ const onSubmit = async (data: ProfileData) => {
                     </Button>
                     <Button 
                       type="submit" 
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isRedirectingToLMS}
                       className="bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105 rounded-lg"
                     >
-                      {isSubmitting ? (
+                      {(isSubmitting || isRedirectingToLMS) ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Saving...
+                          {isRedirectingToLMS ? "Redirecting to LMS..." : "Saving..."}
                         </>
                       ) : (
-                        "Complete Profile"
+                        <>
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Complete Profile & Go to LMS
+                        </>
                       )}
                     </Button>
                   </div>

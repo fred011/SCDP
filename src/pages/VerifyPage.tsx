@@ -6,7 +6,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog";
 import { Alert, AlertDescription } from "../components/ui/alert";
-import { ArrowLeft, Mail, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, Mail, CheckCircle2, XCircle, Loader2, ExternalLink } from "lucide-react";
 
 // API base URL - same as registration
 const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
@@ -23,6 +23,7 @@ export default function VerifyPage() {
   const [verificationError, setVerificationError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [isAlreadyVerified, setIsAlreadyVerified] = useState(false);
+  const [isRedirectingToLMS, setIsRedirectingToLMS] = useState(false);
 
   const validateContact = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -124,12 +125,16 @@ export default function VerifyPage() {
 
       console.log("Verification successful:", result);
       
-      // Show success and then navigate or show success screen
-      setIsSuccess(true);
-      
-      // You can also store the token if needed for future requests
+      // Store token
       if (result.token) {
         localStorage.setItem('authToken', result.token);
+      }
+
+      // Check if profile is complete and redirect to LMS
+      if (result.user?.profileComplete) {
+        await redirectToLMS(result.token);
+      } else {
+        setIsSuccess(true);
       }
 
     } catch (error: any) {
@@ -138,6 +143,82 @@ export default function VerifyPage() {
     } finally {
       setIsVerifying(false);
     }
+  };
+
+  // New function to redirect to LMS
+  const redirectToLMS = async (token: string) => {
+    try {
+      setIsRedirectingToLMS(true);
+      
+      const response = await fetch(`${API_BASE_URL}/auth/sync-to-lms`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to connect to LMS');
+      }
+
+      // Redirect to LMS
+      if (result.lmsLoginUrl) {
+        window.location.href = result.lmsLoginUrl;
+      } else {
+        throw new Error('No LMS URL received');
+      }
+
+    } catch (error: any) {
+      console.error('LMS redirect error:', error);
+      // Fallback: show success page with manual LMS button
+      setIsSuccess(true);
+      setIsRedirectingToLMS(false);
+    }
+  };
+
+  const handleExplorePlatform = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      setIsRedirectingToLMS(true);
+      
+      const response = await fetch(`${API_BASE_URL}/auth/sync-to-lms`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to connect to LMS');
+      }
+
+      // Redirect to LMS
+      if (result.lmsLoginUrl) {
+        window.location.href = result.lmsLoginUrl;
+      } else {
+        throw new Error('No LMS URL received');
+      }
+
+    } catch (error: any) {
+      console.error('LMS redirect error:', error);
+      alert('Failed to connect to LMS. Please try again.');
+      setIsRedirectingToLMS(false);
+    }
+  };
+
+  const handleCompleteProfile = () => {
+    navigate("/complete-profile");
   };
 
   const handleContactChange = (value: string) => {
@@ -199,11 +280,29 @@ export default function VerifyPage() {
                       </ol>
                     </div>
                     <Button 
-                      onClick={handleFinish} 
+                      onClick={handleExplorePlatform} 
+                      disabled={isRedirectingToLMS}
                       className="w-full bg-green-600 text-white hover:bg-green-700 transition-all transform hover:scale-105 rounded-lg" 
                       size="lg"
                     >
-                      Explore Platform
+                      {isRedirectingToLMS ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Connecting to LMS...
+                        </>
+                      ) : (
+                        <>
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Explore Learning Platform
+                        </>
+                      )}
+                    </Button>
+                    <Button 
+                      onClick={handleCompleteProfile}
+                      variant="outline"
+                      className="w-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg"
+                    >
+                      Complete Your Profile
                     </Button>
                   </div>
                 </div>
