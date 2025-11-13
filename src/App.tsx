@@ -28,8 +28,8 @@ function App() {
             <Route path="/" element={<DigitalSkills/>} />
             <Route path="/ManualRegistrationPage" element={<ManualRegistrationPage />} />
             <Route path="/complete-profile" element={<ProfileCompletionPage />} />
-        <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
-        <Route path="/profile-confirmation" element={<ProfileConfirmationPage />} />
+          <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
+          <Route path="/profile-confirmation" element={<ProfileConfirmationPage />} />
              <Route path="/RegisterPage" element={< RegisterPage/>} />
             <Route path="/about" element={<About />} />
             <Route path="/framework" element={<Framework />} />
