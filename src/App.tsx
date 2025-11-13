@@ -25,7 +25,7 @@ function App() {
         <Navbar />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<DigitalSkills/>} />
             <Route path="/ManualRegistrationPage" element={<ManualRegistrationPage />} />
             <Route path="/complete-profile" element={<ProfileCompletionPage />} />
         <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
@@ -38,7 +38,7 @@ function App() {
             <Route path="/stakeholders" element={<Stakeholders />} />
              <Route path="/verify" element={<VerifyPage />} />
             <Route path="/impact" element={<Impact />} />
-            <Route path="/digital-skills" element={<DigitalSkills />} />
+            <Route path="/Home" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
