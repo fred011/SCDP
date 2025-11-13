@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from "../components/ui/alert";
 import { ArrowLeft, Mail, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 // API base URL - same as registration
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
 
 export default function VerifyPage() {
   const navigate = useNavigate();

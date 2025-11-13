@@ -10,7 +10,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
  
   const handleOAuthLogin = (provider: string) => {
-    const API_BASE_URL = 'http://localhost:5001/api';
+    const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
     
     if (provider === 'Google') {
       window.location.href = `${API_BASE_URL}/auth/google`;

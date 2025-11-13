@@ -40,7 +40,7 @@ const step2Schema = z.object({
 type Step1Data = z.infer<typeof step1Schema>;
 type Step2Data = z.infer<typeof step2Schema>;
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = 'https://digital-skills-platform.onrender.com/api';
 
 export default function ManualRegistrationPage() {
   const { toast } = useToast();
