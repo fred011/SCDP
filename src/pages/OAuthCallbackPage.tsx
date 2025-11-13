@@ -57,6 +57,49 @@ export default function OAuthCallbackPage() {
     await redirectToLMS(token);
   };
 
+  const handleTemporaryAccess = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      setStatus('redirecting');
+      
+      // Send a special flag to indicate temporary access with incomplete profile
+      const response = await fetch(`${API_BASE_URL}/auth/sync-to-lms`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          temporaryAccess: true,
+          profileIncomplete: true
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to connect to LMS');
+      }
+
+      // Redirect to LMS with temporary access
+      if (result.lmsLoginUrl) {
+        window.location.href = result.lmsLoginUrl;
+      } else {
+        throw new Error('No LMS URL received');
+      }
+
+    } catch (error: any) {
+      console.error('LMS temporary access error:', error);
+      setStatus('error');
+      setMessage(error.message || 'Failed to connect to LMS. Please try again.');
+    }
+  };
+
   useEffect(() => {
     const handleOAuthCallback = async () => {
       try {
@@ -94,7 +137,7 @@ export default function OAuthCallbackPage() {
           await redirectToLMS(token);
         } else {
           console.log('Profile incomplete, waiting for user action...');
-          setMessage(`Successfully authenticated with ${user.provider}! Please complete your profile to access the learning platform.`);
+          setMessage(`Successfully authenticated with ${user.provider}! You can complete your profile now or get temporary access to the learning platform.`);
         }
 
       } catch (error: any) {
@@ -186,19 +229,30 @@ export default function OAuthCallbackPage() {
                 </div>
               ) : (
                 <div className="space-y-3 w-full">
+                  <div className="text-center mb-2">
+                    <p className="text-sm text-gray-600 mb-3">
+                      Choose how you'd like to proceed:
+                    </p>
+                  </div>
                   <Button 
                     onClick={handleCompleteProfile} 
                     className="w-full bg-green-600 text-white hover:bg-green-700"
                   >
-                    Complete Your Profile
+                    Complete Profile First
                   </Button>
                   <Button 
+                    onClick={handleTemporaryAccess}
                     variant="outline" 
-                    onClick={handleGoHome}
-                    className="w-full"
+                    className="w-full border-green-200 text-green-700 hover:bg-green-50"
                   >
-                    Skip for Now
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Temporary Access to LMS
                   </Button>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-2">
+                    <p className="text-xs text-yellow-800 text-center">
+                      <strong>Note:</strong> You'll need to complete your profile in the LMS to access all features.
+                    </p>
+                  </div>
                 </div>
               )}
             </>
