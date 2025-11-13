@@ -7,6 +7,7 @@ import {
   Loader2,
   CheckCircle2,
   Mail,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import {
@@ -82,6 +83,7 @@ export default function ManualRegistrationPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isRedirectingToLMS, setIsRedirectingToLMS] = useState(false);
 
   // Step 1: Registration Form
   const step1Form = useForm<Step1Data>({
@@ -103,6 +105,53 @@ export default function ManualRegistrationPage() {
       verificationCode: "",
     },
   });
+
+  // Function to redirect to LMS
+  const redirectToLMS = async (token: string) => {
+    try {
+      setIsRedirectingToLMS(true);
+      
+      const response = await fetch(`${API_BASE_URL}/auth/sync-to-lms`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to connect to LMS');
+      }
+
+      // Redirect to LMS
+      if (result.lmsLoginUrl) {
+        window.location.href = result.lmsLoginUrl;
+      } else {
+        throw new Error('No LMS URL received');
+      }
+
+    } catch (error: any) {
+      console.error('LMS redirect error:', error);
+      toast({
+        title: "LMS Connection Failed",
+        description: error.message || "Failed to connect to learning platform. Please try again.",
+        variant: "destructive",
+      });
+      setIsRedirectingToLMS(false);
+    }
+  };
+
+  const handleExplorePlatform = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    await redirectToLMS(token);
+  };
 
   // Step 1: Registration Only
   const onStep1Submit = async (data: Step1Data) => {
@@ -323,7 +372,7 @@ export default function ManualRegistrationPage() {
                           • Complete your profile to personalize your experience
                         </li>
                         <li>
-                          • Explore available courses and training programs
+                          • Access our comprehensive learning platform
                         </li>
                         <li>• Join community discussions and projects</li>
                       </ol>
@@ -337,11 +386,22 @@ export default function ManualRegistrationPage() {
                         Complete Your Profile
                       </Button>
                       <Button
-                        onClick={() => navigate("/")}
+                        onClick={handleExplorePlatform}
+                        disabled={isRedirectingToLMS}
                         variant="outline"
                         className="w-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg"
                       >
-                        Explore Platform First
+                        {isRedirectingToLMS ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Connecting to LMS...
+                          </>
+                        ) : (
+                          <>
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Explore Learning Platform
+                          </>
+                        )}
                       </Button>
                     </div>
                   </div>
