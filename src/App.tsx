@@ -25,13 +25,21 @@ function App() {
         <Navbar />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<DigitalSkills/>} />
-            <Route path="/home" element={<Home/>} />
-            <Route path="/ManualRegistrationPage" element={<ManualRegistrationPage />} />
-            <Route path="/complete-profile" element={<ProfileCompletionPage />} />
-          <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
-          <Route path="/profile-confirmation" element={<ProfileConfirmationPage />} />
-             <Route path="/RegisterPage" element={< RegisterPage/>} />
+            <Route path="/home" element={<Home />} />
+            <Route
+              path="/ManualRegistrationPage"
+              element={<ManualRegistrationPage />}
+            />
+            <Route
+              path="/complete-profile"
+              element={<ProfileCompletionPage />}
+            />
+            <Route path="/oauth-callback" element={<OAuthCallbackPage />} />
+            <Route
+              path="/profile-confirmation"
+              element={<ProfileConfirmationPage />}
+            />
+            <Route path="/RegisterPage" element={<RegisterPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/framework" element={<Framework />} />
             <Route path="/services" element={<Services />} />
@@ -39,6 +47,7 @@ function App() {
             <Route path="/stakeholders" element={<Stakeholders />} />
             <Route path="/verify" element={<VerifyPage />} />
             <Route path="/impact" element={<Impact />} />
+            <Route path="/" element={<DigitalSkills />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>

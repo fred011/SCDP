@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
@@ -97,7 +99,7 @@ export default function VerifyPage() {
         // Check if email is already verified
         else if (result.code === "ALREADY_VERIFIED") {
           setIsAlreadyVerified(true);
-          setIsSuccess(true); 
+          setIsSuccess(true);
           return;
         } else {
           throw new Error(result.error || "Failed to send verification code");
@@ -172,7 +174,7 @@ export default function VerifyPage() {
     }
   };
 
-  // this is the  LMS function to redirect 
+  // this is the  LMS function to redirect
   const redirectToLMS = async (token: string) => {
     try {
       setIsRedirectingToLMS(true);
