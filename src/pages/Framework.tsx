@@ -288,7 +288,9 @@ const Framework = () => {
             className="text-center"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 px-2">
-              <span style={{ fontFamily: "Nunito, sans-serif", fontWeight: 800 }}>
+              <span
+                style={{ fontFamily: "Nunito, sans-serif", fontWeight: 800 }}
+              >
                 <span className="text-green-600">S</span>
                 <span className="text-yellow-500">C</span>
                 <span className="text-red-500">D</span>
@@ -301,70 +303,6 @@ const Framework = () => {
               partnerships.
             </p>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Pillars */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-16"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
-              The Three Pillars
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-              Three integrated pillars that enable inclusive digital
-              transformation, community resilience, and sustainable local growth.
-            </p>
-          </motion.div>
-
-          <div className="space-y-10">
-            {pillars.map((pillar, idx) => (
-              <motion.div
-                key={pillar.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.05 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden"
-              >
-                <div className={`px-6 sm:px-8 py-6 bg-gradient-to-r ${pillar.headerGradient}`}>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-white/90 mt-2">{pillar.description}</p>
-                </div>
-
-                <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {pillar.sections.map((section) => (
-                    <div key={section.title} className="rounded-xl border border-gray-100 p-5">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className={`${section.bg} ${section.color} w-12 h-12 rounded-lg flex items-center justify-center`}>
-                          <section.icon className="h-6 w-6" />
-                        </div>
-                        <h4 className="text-lg font-bold text-gray-900">
-                          {section.title}
-                        </h4>
-                      </div>
-                      <ul className="space-y-2 text-gray-700">
-                        {section.items.map((item) => (
-                          <li key={item} className="flex items-start gap-3">
-                            <span className="mt-2 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -389,9 +327,9 @@ const Framework = () => {
                       Our Solution: Smart Community Framework
                     </h3>
                   </div>
-                  <div className="flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-none md:rounded-b-3xl p-0 md:p-8 shadow-xl">
+                  <div className="flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-none md:rounded-b-3xl p-0 md:p-0 shadow-xl">
                     <img
-                      src="/image.png"
+                      src="/framework.png"
                       alt="Smart Community Framework Circular Diagram"
                       className="w-full h-auto max-w-2xl rounded-none md:rounded-2xl"
                     />
@@ -403,7 +341,9 @@ const Framework = () => {
                   {/* Vision and Mission */}
                   <div className="bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
                     <div className="flex items-start gap-2 sm:gap-3">
-                      <span className="text-xl sm:text-2xl flex-shrink-0">🎯</span>
+                      <span className="text-xl sm:text-2xl flex-shrink-0">
+                        🎯
+                      </span>
                       <div className="min-w-0">
                         <h4 className="font-bold text-blue-600 inline text-sm sm:text-base">
                           Vision:
@@ -419,7 +359,9 @@ const Framework = () => {
                     </div>
 
                     <div className="flex items-start gap-2 sm:gap-3">
-                      <span className="text-xl sm:text-2xl flex-shrink-0">🤝</span>
+                      <span className="text-xl sm:text-2xl flex-shrink-0">
+                        🤝
+                      </span>
                       <div className="min-w-0">
                         <h4 className="font-bold text-cyan-600 inline text-sm sm:text-base">
                           Mission:
@@ -429,8 +371,8 @@ const Framework = () => {
                           to digital infrastructure, skills development, green
                           energy, and inclusive economic opportunities. Through
                           strong partnerships, we drive socio-economic
-                          resilience, technological advancement, and
-                          sustainable community development.
+                          resilience, technological advancement, and sustainable
+                          community development.
                         </span>
                       </div>
                     </div>
@@ -483,6 +425,78 @@ const Framework = () => {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Pillars */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+              The Three Pillars
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4">
+              Three integrated pillars that enable inclusive digital
+              transformation, community resilience, and sustainable local
+              growth.
+            </p>
+          </motion.div>
+
+          <div className="space-y-10">
+            {pillars.map((pillar, idx) => (
+              <motion.div
+                key={pillar.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.05 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-2xl shadow-xl overflow-hidden"
+              >
+                <div
+                  className={`px-6 sm:px-8 py-6 bg-gradient-to-r ${pillar.headerGradient}`}
+                >
+                  <h3 className="text-xl sm:text-2xl font-bold text-white">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-white/90 mt-2">{pillar.description}</p>
+                </div>
+
+                <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {pillar.sections.map((section) => (
+                    <div
+                      key={section.title}
+                      className="rounded-xl border border-gray-100 p-5"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <div
+                          className={`${section.bg} ${section.color} w-12 h-12 rounded-lg flex items-center justify-center`}
+                        >
+                          <section.icon className="h-6 w-6" />
+                        </div>
+                        <h4 className="text-lg font-bold text-gray-900">
+                          {section.title}
+                        </h4>
+                      </div>
+                      <ul className="space-y-2 text-gray-700">
+                        {section.items.map((item) => (
+                          <li key={item} className="flex items-start gap-3">
+                            <span className="mt-2 h-2 w-2 rounded-full bg-gray-300 flex-shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -546,7 +560,9 @@ const Framework = () => {
               The programme turns the framework into practical, community-driven
               implementation.
             </p>
-            <p className="text-gray-700 text-base sm:text-lg mb-4">The programme includes:</p>
+            <p className="text-gray-700 text-base sm:text-lg mb-4">
+              The programme includes:
+            </p>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-800">
               {[
                 "Community connectivity expansion",
