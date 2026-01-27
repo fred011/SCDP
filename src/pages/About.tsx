@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Eye, HeartHandshake, Target, ArrowRight } from "lucide-react";
+import SEO from "../components/SEO";
 
 const About = () => {
   const values = [
@@ -37,7 +38,13 @@ const About = () => {
   ];
 
   return (
-    <div>
+    <>
+      <SEO
+        title="About SCDP"
+        description="Learn about the Smart Community Development Platform (SCDP), our vision, mission, values, and approach to inclusive community development."
+        canonical="https://scdp.co.za/about"
+      />
+      <div>
       {/* Hero */}
       <section className="relative bg-gray-900 text-white min-h-screen flex items-center">
         <div
@@ -221,6 +228,7 @@ const About = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

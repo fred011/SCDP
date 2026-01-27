@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://scdp.co.za/sitemap.xml
